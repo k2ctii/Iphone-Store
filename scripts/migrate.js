@@ -1,72 +1,40 @@
 const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv');
 
-// Manually read .env.local
-const envPath = path.resolve(__dirname, '..', '.env.local');
-let connectionString = '';
+// Load environment variables
+dotenv.config({ path: '.env.local' });
 
-try {
-    const content = fs.readFileSync(envPath, 'utf8');
-    for (const line of content.split('\n')) {
-        if (line.trim().startsWith('DATABASE_URL=')) {
-            connectionString = line.trim().substring('DATABASE_URL='.length).replace(/^"|"$/g, '');
-            break;
-        }
+async function migrate() {
+    const connectionString = process.env.DATABASE_URL;
+
+    if (!connectionString) {
+        console.error('DATABASE_URL is not defined in .env.local');
+        process.exit(1);
     }
-} catch (e) {
-    console.error("Failed to read .env.local", e);
-}
 
-if (!connectionString) {
-    console.error("DATABASE_URL not found in .env.local");
-    process.exit(1);
-}
+    const client = new Client({
+        connectionString,
+        ssl: { rejectUnauthorized: false } // Supabase requires SSL, but we might need to allow self-signed if pooler certificates aren't set up perfectly or just standard logic
+    });
 
-const client = new Client({
-    connectionString,
-    ssl: { rejectUnauthorized: false }
-});
-
-async function runMigrations() {
     try {
-        console.log('Connecting to database (Pooler)...');
         await client.connect();
-        console.log('Connected successfully.');
+        console.log('Connected to database.');
 
-        const migrationDir = path.join(__dirname, '..', 'supabase', 'migrations');
+        const migrationPath = path.join(__dirname, '../supabase/migrations/005_seed_macbooks.sql');
+        const sql = fs.readFileSync(migrationPath, 'utf8');
 
-        if (!fs.existsSync(migrationDir)) {
-            console.error(`Migration directory not found: ${migrationDir}`);
-            process.exit(1);
-        }
-
-        const files = fs.readdirSync(migrationDir).sort();
-
-        for (const file of files) {
-            if (file.endsWith('.sql')) {
-                console.log(`\n--------------------------------------------------`);
-                console.log(`Running migration: ${file}`);
-                const sql = fs.readFileSync(path.join(migrationDir, file), 'utf8');
-
-                try {
-                    await client.query(sql);
-                    console.log(`✅  Success: ${file}`);
-                } catch (qErr) {
-                    console.error(`❌  Failed in ${file}:`);
-                    console.error(qErr.message);
-                    // Some might fail if tables already exist and script uses CREATE TABLE without IF NOT EXISTS
-                    // But we will continue
-                }
-            }
-        }
-
-        console.log('\n🎉 Migration process finished.');
+        console.log('Running migration...');
+        await client.query(sql);
+        console.log('Migration completed successfully.');
     } catch (err) {
-        console.error('❌ Connection or Execution error:', err);
+        console.error('Migration failed:', err);
+        process.exit(1);
     } finally {
         await client.end();
     }
 }
 
-runMigrations();
+migrate();

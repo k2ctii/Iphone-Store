@@ -76,7 +76,7 @@ export function ProductGrid() {
                             <span className="gradient-text">The lineup.</span>
                         </h2>
                         <p className="text-lg text-white/40">
-                            Which iPhone is right for you?
+                            Which Mac is right for you?
                         </p>
                     </div>
                     <button className="text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium flex items-center gap-1 group">
@@ -131,7 +131,7 @@ export function ProductGrid() {
                             >
                                 <div className="dark-glass-card rounded-2xl overflow-hidden h-full flex flex-col">
                                     {/* Product Image Area */}
-                                    <div className={`relative w-full aspect-[3/4] bg-gradient-to-br ${product.gradient ?? 'from-zinc-800 to-zinc-900'} flex items-center justify-center overflow-hidden`}>
+                                    <div className={`relative w-full aspect-[4/3] bg-gradient-to-br ${product.gradient ?? 'from-zinc-800 to-zinc-900'} flex items-center justify-center overflow-hidden`}>
                                         {/* Badge */}
                                         {product.badge && (
                                             <div className="absolute top-4 left-4 z-10">
@@ -141,17 +141,28 @@ export function ProductGrid() {
                                             </div>
                                         )}
 
+                                        {/* Image or Placeholder */}
+                                        <motion.div
+                                            className="w-full h-full flex items-center justify-center p-8"
+                                            whileHover={{ scale: 1.05 }}
+                                            transition={{ duration: 0.4 }}
+                                        >
+                                            {product.image_url ? (
+                                                <img
+                                                    src={product.image_url}
+                                                    alt={product.name}
+                                                    className="w-full h-auto object-contain drop-shadow-2xl"
+                                                />
+                                            ) : (
+                                                <div className="text-center">
+                                                    <p className="text-3xl font-bold gradient-text">{product.name.split(" ").pop()}</p>
+                                                    <p className="text-white/20 text-sm mt-1">Product image</p>
+                                                </div>
+                                            )}
+                                        </motion.div>
+
                                         {/* Hover glow */}
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                                        {/* Floating product name */}
-                                        <motion.div
-                                            className="text-center"
-                                            whileHover={{ scale: 1.02 }}
-                                        >
-                                            <p className="text-3xl font-bold gradient-text">{product.name.split(" ").pop()}</p>
-                                            <p className="text-white/20 text-sm mt-1">Product image</p>
-                                        </motion.div>
                                     </div>
 
                                     {/* Product Info */}

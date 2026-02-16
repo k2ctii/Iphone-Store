@@ -40,9 +40,9 @@ export function CTABanner() {
                                 Ready to upgrade?
                             </p>
                             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-                                <span className="gradient-text">Trade in your old iPhone.</span>
+                                <span className="gradient-text">Trade in your eligible computer.</span>
                                 <br />
-                                <span className="text-white/90">Get credit toward a new one.</span>
+                                <span className="text-white/90">Get credit toward a new Mac.</span>
                             </h2>
                             <p className="text-lg text-white/40 max-w-lg mx-auto mb-10">
                                 With Apple Trade In, you can get a great value for your current device and apply it toward a new one.

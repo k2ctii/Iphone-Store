@@ -8,19 +8,19 @@ const testimonials = [
     {
         name: "Lucas M.",
         role: "Filmmaker",
-        text: "The camera system is absolutely insane. I shot an entire short film on the iPhone 16 Pro Max and the results blew everyone away.",
+        text: "The M4 Max renders 8K video in real-time without breaking a sweat. It's an entire editing studio in my backpack.",
         rating: 5,
     },
     {
         name: "Sofia R.",
         role: "Developer",
-        text: "The performance of the A18 Pro chip is on another level. Multitasking feels seamless and the battery lasts all day.",
+        text: "Compiling my largest projects takes seconds on the MacBook Pro. The battery life is unbelievable for this much power.",
         rating: 5,
     },
     {
         name: "Daniel K.",
         role: "Photographer",
-        text: "5x optical zoom changed my photography. I can capture moments from a distance that I never could before. Pure magic.",
+        text: "The Liquid Retina XDR display is a game changer for editing photos on the go. Perfect color accuracy right out of the box.",
         rating: 5,
     },
 ];

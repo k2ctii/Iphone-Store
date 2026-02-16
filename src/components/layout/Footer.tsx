@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 const footerLinks = [
     {
         title: "Shop and Learn",
-        links: ["Store", "Mac", "iPad", "iPhone", "Watch", "AirPods", "TV & Home", "AirTag", "Accessories"],
+        links: ["Store", "MacBook Air", "MacBook Pro", "iMac", "Mac mini", "Displays", "Accessories"],
     },
     {
         title: "Services",
@@ -62,7 +62,7 @@ export function Footer() {
                 {/* Bottom */}
                 <div className="py-6 border-t border-white/[0.04] flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-xs text-white/20">
-                        &copy; {new Date().getFullYear()} iPhone Store. All rights reserved. Not affiliated with Apple Inc.
+                        &copy; {new Date().getFullYear()} Mac Store. All rights reserved. Not affiliated with Apple Inc.
                     </p>
                     <div className="flex gap-6">
                         {["Privacy Policy", "Terms of Use", "Sales Policy"].map((link) => (

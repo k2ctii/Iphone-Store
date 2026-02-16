@@ -61,7 +61,7 @@ export function Hero() {
                     <div className="dark-glass-button inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 cursor-pointer group">
                         <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
                         <span className="text-xs font-medium text-white/70 group-hover:text-white/90 transition-colors">
-                            New Arrival — iPhone 16 Pro Max
+                            New Arrival — MacBook Pro M4
                         </span>
                         <ChevronRight className="h-3 w-3 text-white/40 group-hover:translate-x-0.5 transition-transform" />
                     </div>
@@ -74,7 +74,7 @@ export function Hero() {
                     transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
                     className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.9] mb-6"
                 >
-                    <span className="gradient-text-titanium">Titanium.</span>
+                    <span className="gradient-text-titanium">Mind-blowing.</span>
                 </motion.h1>
 
                 <motion.h2
@@ -83,7 +83,7 @@ export function Hero() {
                     transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
                     className="text-3xl md:text-5xl font-semibold tracking-tight text-white/90 mb-4"
                 >
-                    So strong. So light. So Pro.
+                    Head-turning.
                 </motion.h2>
 
                 <motion.p
@@ -92,8 +92,8 @@ export function Hero() {
                     transition={{ duration: 0.8, delay: 0.5 }}
                     className="text-lg md:text-xl text-white/40 max-w-lg mb-12"
                 >
-                    iPhone 16 Pro Max. Forged in titanium. Powered by the A18 Pro chip.
-                    The thinnest borders ever on iPhone.
+                    MacBook Pro. Powered by the M4 family of chips.
+                    The most powerful Mac lineup ever.
                 </motion.p>
 
                 {/* CTA Buttons */}
@@ -142,8 +142,8 @@ export function Hero() {
                                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                                 className="text-center"
                             >
-                                <p className="text-5xl md:text-7xl font-bold gradient-text-neon mb-2">iPhone 16 Pro</p>
-                                <p className="text-white/30 text-lg">Product image placeholder</p>
+                                <p className="text-5xl md:text-7xl font-bold gradient-text-neon mb-2">MacBook Pro</p>
+                                <p className="text-white/30 text-lg">M4, M4 Pro, and M4 Max</p>
                             </motion.div>
                         </div>
                     </div>

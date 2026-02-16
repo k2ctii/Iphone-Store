@@ -1,106 +1,19 @@
 {
     "tradeInModels": [
         {
-            "id": "iphone-11",
-            "name": "iPhone 11",
+            "id": "macbook-air-m1",
+            "name": "MacBook Air M1",
             "baseValues": {
-                "64": 80,
-                "128": 100,
-                "256": 120
-            }
-        },
-        {
-            "id": "iphone-12",
-            "name": "iPhone 12",
-            "baseValues": {
-                "64": 120,
-                "128": 150,
-                "256": 170
-            }
-        },
-        {
-            "id": "iphone-12-pro",
-            "name": "iPhone 12 Pro",
-            "baseValues": {
-                "128": 180,
-                "256": 210,
-                "512": 240
-            }
-        },
-        {
-            "id": "iphone-13",
-            "name": "iPhone 13",
-            "baseValues": {
-                "128": 200,
-                "256": 230,
-                "512": 260
-            }
-        },
-        {
-            "id": "iphone-13-pro",
-            "name": "iPhone 13 Pro",
-            "baseValues": {
-                "128": 260,
-                "256": 300,
-                "512": 340,
-                "1024": 380
-            }
-        },
-        {
-            "id": "iphone-14",
-            "name": "iPhone 14",
-            "baseValues": {
-                "128": 300,
-                "256": 340,
-                "512": 380
-            }
-        },
-        {
-            "id": "iphone-14-pro",
-            "name": "iPhone 14 Pro",
-            "baseValues": {
-                "128": 370,
-                "256": 420,
-                "512": 470,
-                "1024": 520
-            }
-        },
-        {
-            "id": "iphone-15",
-            "name": "iPhone 15",
-            "baseValues": {
-                "128": 400,
-                "256": 450,
+                "256": 400,
                 "512": 500
             }
         },
         {
-            "id": "iphone-15-pro",
-            "name": "iPhone 15 Pro",
+            "id": "macbook-pro-m1",
+            "name": "MacBook Pro M1",
             "baseValues": {
-                "128": 480,
-                "256": 540,
-                "512": 600,
-                "1024": 660
-            }
-        },
-        {
-            "id": "iphone-16",
-            "name": "iPhone 16",
-            "baseValues": {
-                "128": 520,
-                "256": 580,
-                "512": 640
-            }
-        },
-        {
-            "id": "iphone-16-pro",
-            "name": "iPhone 16 Pro",
-            "baseValues": {
-                "128": 600,
-                "256": 670,
-                "512": 740,
-                "1024": 810
+                "256": 600,
+                "512": 700
             }
         }
     ],

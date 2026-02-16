@@ -22,10 +22,10 @@ export interface Product {
     tagline: string;
     price: number;             // base price in USD
     priceFrom: boolean;        // "From $999" vs "$999"
-    category: "pro-max" | "pro" | "standard" | "previous";
+    category: "macbook-air" | "macbook-pro-14" | "macbook-pro-16";
     badge: string | null;
     colors: ProductColor[];
-    storageOptions: number[];  // GB values: [128, 256, 512, 1024]
+    storageOptions: number[];  // GB values: [256, 512, 1024, 2048]
     storagePricing: Record<number, number>; // { 128: 0, 256: 100, ... } — add-on price
     specs: ProductSpec[];
     compatibleAccessories: string[]; // accessory IDs

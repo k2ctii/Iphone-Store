@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const CartSheet = dynamic(() => import("@/components/cart/CartSheet").then(m => m.CartSheet), { ssr: false });
 const AuthModal = dynamic(() => import("@/components/auth/AuthModal").then(m => m.AuthModal), { ssr: false });
 
-const navLinks = ["Store", "iPhone", "Mac", "iPad", "Watch", "AirPods", "Support"];
+const navLinks = ["Store", "MacBook Air", "MacBook Pro", "iMac", "Mac mini", "Accessories", "Support"];
 
 export function Header() {
     const { toggleCart, items } = useCart();
@@ -58,7 +58,7 @@ export function Header() {
                         {/* Logo */}
                         <Link href="/" className="relative group">
                             <span className="text-lg font-bold tracking-tight text-white/90 group-hover:text-white transition-colors">
-                                iPhone
+                                Mac
                             </span>
                             <span className="text-lg font-light tracking-tight text-white/50 group-hover:text-white/70 transition-colors ml-1">
                                 Store
