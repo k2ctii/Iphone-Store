@@ -24,7 +24,7 @@ export function CTABanner() {
             </div>
 
             <Container className="relative z-10">
-                <div className="dark-glass-card luminous-border rounded-3xl p-12 md:p-20 text-center relative overflow-hidden">
+                <div className="dark-glass-card frosted-heavy luminous-border rounded-3xl p-12 md:p-20 text-center relative overflow-hidden">
                     {/* Inner decorative orbs */}
                     <div className="absolute -top-20 -left-20 w-60 h-60 bg-blue-500/12 blur-[100px] rounded-full" />
                     <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-purple-500/12 blur-[100px] rounded-full" />

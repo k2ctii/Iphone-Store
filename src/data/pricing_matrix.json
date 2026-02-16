@@ -1,0 +1,137 @@
+{
+    "tradeInModels": [
+        {
+            "id": "iphone-11",
+            "name": "iPhone 11",
+            "baseValues": {
+                "64": 80,
+                "128": 100,
+                "256": 120
+            }
+        },
+        {
+            "id": "iphone-12",
+            "name": "iPhone 12",
+            "baseValues": {
+                "64": 120,
+                "128": 150,
+                "256": 170
+            }
+        },
+        {
+            "id": "iphone-12-pro",
+            "name": "iPhone 12 Pro",
+            "baseValues": {
+                "128": 180,
+                "256": 210,
+                "512": 240
+            }
+        },
+        {
+            "id": "iphone-13",
+            "name": "iPhone 13",
+            "baseValues": {
+                "128": 200,
+                "256": 230,
+                "512": 260
+            }
+        },
+        {
+            "id": "iphone-13-pro",
+            "name": "iPhone 13 Pro",
+            "baseValues": {
+                "128": 260,
+                "256": 300,
+                "512": 340,
+                "1024": 380
+            }
+        },
+        {
+            "id": "iphone-14",
+            "name": "iPhone 14",
+            "baseValues": {
+                "128": 300,
+                "256": 340,
+                "512": 380
+            }
+        },
+        {
+            "id": "iphone-14-pro",
+            "name": "iPhone 14 Pro",
+            "baseValues": {
+                "128": 370,
+                "256": 420,
+                "512": 470,
+                "1024": 520
+            }
+        },
+        {
+            "id": "iphone-15",
+            "name": "iPhone 15",
+            "baseValues": {
+                "128": 400,
+                "256": 450,
+                "512": 500
+            }
+        },
+        {
+            "id": "iphone-15-pro",
+            "name": "iPhone 15 Pro",
+            "baseValues": {
+                "128": 480,
+                "256": 540,
+                "512": 600,
+                "1024": 660
+            }
+        },
+        {
+            "id": "iphone-16",
+            "name": "iPhone 16",
+            "baseValues": {
+                "128": 520,
+                "256": 580,
+                "512": 640
+            }
+        },
+        {
+            "id": "iphone-16-pro",
+            "name": "iPhone 16 Pro",
+            "baseValues": {
+                "128": 600,
+                "256": 670,
+                "512": 740,
+                "1024": 810
+            }
+        }
+    ],
+    "conditions": [
+        {
+            "id": "screen-cracked",
+            "question": "Is the screen cracked or damaged?",
+            "description": "Visible cracks, dead pixels, or touch issues",
+            "deductionPercent": 40,
+            "icon": "smartphone"
+        },
+        {
+            "id": "battery-degraded",
+            "question": "Is the battery health below 80%?",
+            "description": "Check in Settings → Battery → Battery Health",
+            "deductionPercent": 15,
+            "icon": "battery-low"
+        },
+        {
+            "id": "body-damage",
+            "question": "Are there scratches or dents on the body?",
+            "description": "Visible cosmetic damage on the frame or back",
+            "deductionPercent": 10,
+            "icon": "shield-alert"
+        },
+        {
+            "id": "icloud-locked",
+            "question": "Is the device locked to iCloud?",
+            "description": "Find My iPhone must be disabled before trade-in",
+            "deductionPercent": 100,
+            "icon": "lock"
+        }
+    ]
+}

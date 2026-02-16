@@ -1,26 +1,46 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, Menu, Search, X } from "lucide-react";
+import dynamic from "next/dynamic";
+import { ShoppingBag, Menu, Search, X, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { useCart } from "@/lib/store";
-import { CartSheet } from "@/components/cart/CartSheet";
-import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
+// Lazy-load heavy modals — only downloaded when user interacts
+const CartSheet = dynamic(() => import("@/components/cart/CartSheet").then(m => m.CartSheet), { ssr: false });
+const AuthModal = dynamic(() => import("@/components/auth/AuthModal").then(m => m.AuthModal), { ssr: false });
 
 const navLinks = ["Store", "iPhone", "Mac", "iPad", "Watch", "AirPods", "Support"];
 
 export function Header() {
     const { toggleCart, items } = useCart();
+    const { user, loading: authLoading, signOut } = useAuth();
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [authOpen, setAuthOpen] = useState(false);
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+    // RAF-throttled scroll — max 1 setState per animation frame instead of 60/sec
+    const rafRef = useRef<number>(0);
+    const handleScroll = useCallback(() => {
+        if (rafRef.current) return;
+        rafRef.current = requestAnimationFrame(() => {
+            setScrolled(window.scrollY > 20);
+            rafRef.current = 0;
+        });
+    }, []);
 
     useEffect(() => {
-        const handler = () => setScrolled(window.scrollY > 20);
-        window.addEventListener("scroll", handler);
-        return () => window.removeEventListener("scroll", handler);
-    }, []);
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        };
+    }, [handleScroll]);
 
     return (
         <>
@@ -29,7 +49,7 @@ export function Header() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-                    ? "dark-glass-header shadow-lg shadow-black/30"
+                    ? "frosted-medium shadow-lg shadow-black/30"
                     : "bg-transparent"
                     }`}
             >
@@ -91,6 +111,65 @@ export function Header() {
                                 </AnimatePresence>
                             </Button>
 
+                            {/* Auth button */}
+                            {!authLoading && (
+                                <>
+                                    {user ? (
+                                        <div className="relative">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                                                className="h-9 w-9 text-white/60 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
+                                            >
+                                                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+                                                    <span className="text-[10px] font-bold text-white">
+                                                        {user.email?.charAt(0).toUpperCase()}
+                                                    </span>
+                                                </div>
+                                            </Button>
+
+                                            {/* User dropdown */}
+                                            <AnimatePresence>
+                                                {userMenuOpen && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, y: 5, scale: 0.95 }}
+                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                        exit={{ opacity: 0, y: 5, scale: 0.95 }}
+                                                        transition={{ duration: 0.15 }}
+                                                        className="absolute right-0 top-12 w-56 dark-glass-card rounded-2xl p-2 border border-white/[0.08]"
+                                                    >
+                                                        <div className="px-3 py-2 border-b border-white/[0.06] mb-1">
+                                                            <p className="text-xs text-white/40">Signed in as</p>
+                                                            <p className="text-sm text-white/80 truncate">{user.email}</p>
+                                                        </div>
+                                                        <button
+                                                            onClick={async () => {
+                                                                await signOut();
+                                                                setUserMenuOpen(false);
+                                                            }}
+                                                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors"
+                                                        >
+                                                            <LogOut className="h-4 w-4" />
+                                                            Sign out
+                                                        </button>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+                                    ) : (
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => setAuthOpen(true)}
+                                            className="h-9 w-9 text-white/60 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
+                                        >
+                                            <User className="h-4 w-4" />
+                                        </Button>
+                                    )}
+                                </>
+                            )}
+
                             <Button
                                 variant="ghost"
                                 size="icon"
@@ -138,6 +217,7 @@ export function Header() {
             </AnimatePresence>
 
             <CartSheet />
+            <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
         </>
     );
 }

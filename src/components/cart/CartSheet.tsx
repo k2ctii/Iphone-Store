@@ -3,12 +3,54 @@
 import { useCart } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
-import { Trash2, ShoppingBag, Plus, Minus } from "lucide-react";
+import { Trash2, ShoppingBag, Plus, Minus, Loader2, CheckCircle2 } from "lucide-react";
+import { useOrders } from "@/hooks/useOrders";
+import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function CartSheet() {
-    const { items, removeItem, isOpen, toggleCart, addItem } = useCart();
+    const { items, removeItem, isOpen, toggleCart, addItem, decrementItem, clearCart } = useCart();
+    const { createOrder } = useOrders();
+    const { user } = useAuth();
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
+    const [checkoutError, setCheckoutError] = useState<string | null>(null);
+    const [checkoutSuccess, setCheckoutSuccess] = useState(false);
 
     const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+    const handleCheckout = async () => {
+        if (!user) {
+            setCheckoutError("Please sign in to complete your purchase.");
+            return;
+        }
+
+        setCheckoutLoading(true);
+        setCheckoutError(null);
+
+        const result = await createOrder(
+            items.map((item) => ({
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
+                color: item.color,
+            }))
+        );
+
+        setCheckoutLoading(false);
+
+        if (result.success) {
+            setCheckoutSuccess(true);
+            clearCart();
+            // Reset after showing success
+            setTimeout(() => {
+                setCheckoutSuccess(false);
+            }, 3000);
+        } else {
+            setCheckoutError(result.error ?? "Checkout failed. Please try again.");
+        }
+    };
 
     return (
         <Sheet open={isOpen} onOpenChange={toggleCart}>
@@ -24,7 +66,27 @@ export function CartSheet() {
                 </SheetHeader>
 
                 <div className="flex-1 overflow-y-auto py-6">
-                    {items.length === 0 ? (
+                    {/* Success state */}
+                    <AnimatePresence>
+                        {checkoutSuccess && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                className="flex flex-col items-center justify-center h-full text-center gap-6 px-6"
+                            >
+                                <div className="dark-glass-card rounded-3xl p-8">
+                                    <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
+                                        <CheckCircle2 className="h-10 w-10 text-emerald-400" />
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-white mb-2">Order placed!</h3>
+                                    <p className="text-white/40 text-sm">Your order has been created successfully.</p>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {!checkoutSuccess && items.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center gap-6 px-6">
                             <div className="dark-glass-card rounded-3xl p-8">
                                 <ShoppingBag className="h-12 w-12 text-white/10 mx-auto mb-4" />
@@ -39,7 +101,7 @@ export function CartSheet() {
                                 Continue Shopping
                             </Button>
                         </div>
-                    ) : (
+                    ) : !checkoutSuccess ? (
                         <div className="space-y-4 px-1">
                             {items.map((item) => (
                                 <div
@@ -57,17 +119,7 @@ export function CartSheet() {
                                         <p className="text-xs text-white/40 mt-0.5">${item.price.toFixed(2)}</p>
                                         <div className="flex items-center gap-2 mt-2">
                                             <button
-                                                onClick={() => {
-                                                    if (item.quantity === 1) {
-                                                        removeItem(item.id);
-                                                    } else {
-                                                        // For simplicity, remove and re-add with lower qty
-                                                        removeItem(item.id);
-                                                        for (let k = 0; k < item.quantity - 1; k++) {
-                                                            addItem({ ...item, quantity: 1 });
-                                                        }
-                                                    }
-                                                }}
+                                                onClick={() => decrementItem(item.id)}
                                                 className="dark-glass-button h-6 w-6 rounded-full flex items-center justify-center text-white/40 hover:text-white/80"
                                             >
                                                 <Minus className="h-3 w-3" />
@@ -94,10 +146,10 @@ export function CartSheet() {
                                 </div>
                             ))}
                         </div>
-                    )}
+                    ) : null}
                 </div>
 
-                {items.length > 0 && (
+                {items.length > 0 && !checkoutSuccess && (
                     <SheetFooter className="border-t border-white/[0.06] pt-6 sm:justify-start flex-col gap-4">
                         <div className="w-full space-y-2 mb-2">
                             <div className="flex justify-between items-center text-sm text-white/40">
@@ -114,12 +166,37 @@ export function CartSheet() {
                                 <span>${total.toFixed(2)}</span>
                             </div>
                         </div>
+
+                        {/* Checkout error */}
+                        {checkoutError && (
+                            <motion.p
+                                initial={{ opacity: 0, y: -5 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-sm text-red-400 bg-red-500/10 rounded-lg px-4 py-2 w-full text-center"
+                            >
+                                {checkoutError}
+                            </motion.p>
+                        )}
+
                         <Button
-                            className="w-full h-12 rounded-full text-base bg-white text-black hover:bg-white/90 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] font-medium"
+                            className="w-full h-12 rounded-full text-base bg-white text-black hover:bg-white/90 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] font-medium disabled:opacity-50"
                             size="lg"
+                            onClick={handleCheckout}
+                            disabled={checkoutLoading}
                         >
-                            Checkout
+                            {checkoutLoading ? (
+                                <Loader2 className="h-5 w-5 animate-spin" />
+                            ) : (
+                                "Checkout"
+                            )}
                         </Button>
+
+                        {!user && (
+                            <p className="text-xs text-white/30 text-center">
+                                You need to sign in to complete your purchase.
+                            </p>
+                        )}
+
                         <Button
                             variant="ghost"
                             className="w-full h-10 rounded-full text-white/40 hover:text-white/70 hover:bg-white/5"

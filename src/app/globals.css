@@ -575,3 +575,96 @@
     color-scheme: dark;
   }
 }
+
+/* ========================================
+   Performance Utilities
+   ======================================== */
+
+/* Defer rendering of off-screen sections — huge paint savings */
+.perf-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
+/* Promote animated elements to GPU compositing layer */
+.perf-animated {
+  will-change: transform, opacity;
+}
+
+/* Isolate glass cards to prevent backdrop-filter from triggering global compositing */
+.dark-glass-card,
+.glass-card {
+  contain: layout style paint;
+}
+/* ========================================
+   Frosted Glass Design System
+   ======================================== */
+
+.frosted-glass {
+  position: relative;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(30px) saturate(120%);
+  -webkit-backdrop-filter: blur(30px) saturate(120%);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  padding: 2rem;
+}
+
+/* Optional: Add subtle noise texture for realism */
+.frosted-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.frosted-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Blur Intensity Levels */
+
+/* Light Frosted (20px blur) */
+.frosted-light {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Medium Frosted (30px blur) - RECOMMENDED */
+.frosted-medium {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+}
+
+/* Heavy Frosted (40px+ blur) */
+.frosted-heavy {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+/* Ultra Frosted (60px+ blur) */
+.frosted-ultra {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(60px);
+  -webkit-backdrop-filter: blur(60px);
+}
+
+/* Color Variants */
+
+/* Light Mode Frosted */
+.frosted-light-mode {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(30px) saturate(120%);
+  -webkit-backdrop-filter: blur(30px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}

@@ -4,68 +4,10 @@ import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useCart } from "@/lib/store";
-import { ShoppingBag, ArrowRight } from "lucide-react";
-
-const products = [
-    {
-        id: "iphone-16-pro-max",
-        name: "iPhone 16 Pro Max",
-        price: 1199,
-        tagline: "The biggest upgrade to Pro.",
-        colors: [
-            { name: "Desert Titanium", class: "bg-[#BFA48F]" },
-            { name: "Natural Titanium", class: "bg-[#C2BCB2]" },
-            { name: "White Titanium", class: "bg-[#F2F0ED]" },
-            { name: "Black Titanium", class: "bg-[#3C3B37]" },
-        ],
-        badge: "New",
-        gradient: "from-amber-900/20 via-zinc-900 to-zinc-900",
-    },
-    {
-        id: "iphone-16-pro",
-        name: "iPhone 16 Pro",
-        price: 999,
-        tagline: "The ultimate iPhone.",
-        colors: [
-            { name: "Desert Titanium", class: "bg-[#BFA48F]" },
-            { name: "Natural Titanium", class: "bg-[#C2BCB2]" },
-            { name: "White Titanium", class: "bg-[#F2F0ED]" },
-            { name: "Black Titanium", class: "bg-[#3C3B37]" },
-        ],
-        badge: "Popular",
-        gradient: "from-slate-800/30 via-zinc-900 to-zinc-900",
-    },
-    {
-        id: "iphone-16",
-        name: "iPhone 16",
-        price: 799,
-        tagline: "A total powerhouse.",
-        colors: [
-            { name: "Ultramarine", class: "bg-[#7A96D6]" },
-            { name: "Teal", class: "bg-[#B0D4C1]" },
-            { name: "Pink", class: "bg-[#F2B8C6]" },
-            { name: "White", class: "bg-[#F2F0ED]" },
-            { name: "Black", class: "bg-[#3C3D41]" },
-        ],
-        badge: null,
-        gradient: "from-blue-900/20 via-zinc-900 to-zinc-900",
-    },
-    {
-        id: "iphone-15",
-        name: "iPhone 15",
-        price: 699,
-        tagline: "As amazing as ever.",
-        colors: [
-            { name: "Blue", class: "bg-[#BECDE8]" },
-            { name: "Pink", class: "bg-[#F5D1D8]" },
-            { name: "Yellow", class: "bg-[#F0E5C8]" },
-            { name: "Green", class: "bg-[#D1E2D0]" },
-            { name: "Black", class: "bg-[#3C3D41]" },
-        ],
-        badge: null,
-        gradient: "from-cyan-900/20 via-zinc-900 to-zinc-900",
-    },
-];
+import { useProducts } from "@/hooks/useProducts";
+import { useCallback } from "react";
+import { ShoppingBag, ArrowRight, Loader2, RefreshCw } from "lucide-react";
+import type { ProductWithColors } from "@/lib/database.types";
 
 const containerVariants = {
     hidden: {},
@@ -77,18 +19,42 @@ const cardVariants = {
     visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7 } },
 };
 
+// Skeleton component for loading state
+function ProductSkeleton() {
+    return (
+        <div className="dark-glass-card rounded-2xl overflow-hidden h-full flex flex-col animate-pulse">
+            <div className="w-full aspect-[3/4] bg-white/[0.03]" />
+            <div className="p-6 flex flex-col flex-1">
+                <div className="flex gap-2 mb-4">
+                    {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="w-4 h-4 rounded-full bg-white/[0.06]" />
+                    ))}
+                </div>
+                <div className="h-5 bg-white/[0.06] rounded w-3/4 mb-2" />
+                <div className="h-4 bg-white/[0.04] rounded w-1/2 mb-3" />
+                <div className="h-5 bg-white/[0.06] rounded w-1/3 mb-6" />
+                <div className="mt-auto space-y-2">
+                    <div className="h-11 bg-white/[0.06] rounded-full" />
+                    <div className="h-11 bg-white/[0.03] rounded-full" />
+                </div>
+            </div>
+        </div>
+    );
+}
+
 export function ProductGrid() {
     const { addItem } = useCart();
+    const { products, loading, error, refetch } = useProducts();
 
-    const handleAddToCart = (product: typeof products[0]) => {
+    const handleAddToCart = useCallback((product: ProductWithColors) => {
         addItem({
             id: product.id,
             name: product.name,
             price: product.price,
-            image: "/placeholder",
+            image: product.image_url ?? "/placeholder",
             quantity: 1,
         });
-    };
+    }, [addItem]);
 
     return (
         <section className="py-32 bg-carbon relative overflow-hidden">
@@ -119,84 +85,124 @@ export function ProductGrid() {
                     </button>
                 </motion.div>
 
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.1 }}
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-                >
-                    {products.map((product) => (
-                        <motion.div
-                            key={product.id}
-                            variants={cardVariants}
-                            className="group"
-                        >
-                            <div className="dark-glass-card rounded-2xl overflow-hidden h-full flex flex-col">
-                                {/* Product Image Area */}
-                                <div className={`relative w-full aspect-[3/4] bg-gradient-to-br ${product.gradient} flex items-center justify-center overflow-hidden`}>
-                                    {/* Badge */}
-                                    {product.badge && (
-                                        <div className="absolute top-4 left-4 z-10">
-                                            <span className="dark-glass-button px-3 py-1 rounded-full text-[11px] font-medium text-white/80">
-                                                {product.badge}
-                                            </span>
+                {/* Error state */}
+                {error && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-center py-16"
+                    >
+                        <div className="dark-glass-card rounded-3xl p-8 max-w-md mx-auto">
+                            <p className="text-white/40 text-sm mb-4">{error}</p>
+                            <Button
+                                onClick={refetch}
+                                className="rounded-full bg-white text-black hover:bg-white/90"
+                            >
+                                <RefreshCw className="mr-2 h-4 w-4" />
+                                Try again
+                            </Button>
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* Loading state */}
+                {loading && !error && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {[1, 2, 3, 4].map((i) => (
+                            <ProductSkeleton key={i} />
+                        ))}
+                    </div>
+                )}
+
+                {/* Products grid */}
+                {!loading && !error && (
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.1 }}
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+                    >
+                        {products.map((product) => (
+                            <motion.div
+                                key={product.id}
+                                variants={cardVariants}
+                                className="group"
+                            >
+                                <div className="dark-glass-card rounded-2xl overflow-hidden h-full flex flex-col">
+                                    {/* Product Image Area */}
+                                    <div className={`relative w-full aspect-[3/4] bg-gradient-to-br ${product.gradient ?? 'from-zinc-800 to-zinc-900'} flex items-center justify-center overflow-hidden`}>
+                                        {/* Badge */}
+                                        {product.badge && (
+                                            <div className="absolute top-4 left-4 z-10">
+                                                <span className="dark-glass-button px-3 py-1 rounded-full text-[11px] font-medium text-white/80">
+                                                    {product.badge}
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        {/* Hover glow */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                                        {/* Floating product name */}
+                                        <motion.div
+                                            className="text-center"
+                                            whileHover={{ scale: 1.02 }}
+                                        >
+                                            <p className="text-3xl font-bold gradient-text">{product.name.split(" ").pop()}</p>
+                                            <p className="text-white/20 text-sm mt-1">Product image</p>
+                                        </motion.div>
+                                    </div>
+
+                                    {/* Product Info */}
+                                    <div className="p-6 flex flex-col flex-1">
+                                        {/* Color swatches */}
+                                        <div className="flex gap-2 mb-4">
+                                            {product.product_colors.map((color) => (
+                                                <button
+                                                    key={color.id}
+                                                    title={color.name}
+                                                    className="w-4 h-4 rounded-full ring-1 ring-white/10 hover:ring-white/30 transition-all duration-200 hover:scale-110"
+                                                    style={{ backgroundColor: color.hex_color }}
+                                                />
+                                            ))}
                                         </div>
-                                    )}
 
-                                    {/* Hover glow */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        <h3 className="text-lg font-semibold text-white mb-1">{product.name}</h3>
+                                        <p className="text-sm text-white/40 mb-3">{product.tagline}</p>
+                                        <p className="text-lg font-semibold text-white mb-6">
+                                            From <span className="gradient-text-accent">${product.price}</span>
+                                        </p>
 
-                                    {/* Floating product name */}
-                                    <motion.div
-                                        className="text-center"
-                                        whileHover={{ scale: 1.02 }}
-                                    >
-                                        <p className="text-3xl font-bold gradient-text">{product.name.split(" ").pop()}</p>
-                                        <p className="text-white/20 text-sm mt-1">Product image</p>
-                                    </motion.div>
-                                </div>
-
-                                {/* Product Info */}
-                                <div className="p-6 flex flex-col flex-1">
-                                    {/* Color swatches */}
-                                    <div className="flex gap-2 mb-4">
-                                        {product.colors.map((color) => (
-                                            <button
-                                                key={color.name}
-                                                title={color.name}
-                                                className={`w-4 h-4 rounded-full ${color.class} ring-1 ring-white/10 hover:ring-white/30 transition-all duration-200 hover:scale-110`}
-                                            />
-                                        ))}
-                                    </div>
-
-                                    <h3 className="text-lg font-semibold text-white mb-1">{product.name}</h3>
-                                    <p className="text-sm text-white/40 mb-3">{product.tagline}</p>
-                                    <p className="text-lg font-semibold text-white mb-6">
-                                        From <span className="gradient-text-accent">${product.price}</span>
-                                    </p>
-
-                                    {/* Buttons */}
-                                    <div className="mt-auto flex flex-col gap-2">
-                                        <Button
-                                            onClick={() => handleAddToCart(product)}
-                                            className="w-full rounded-full h-11 bg-white text-black hover:bg-white/90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] font-medium"
-                                        >
-                                            <ShoppingBag className="mr-2 h-4 w-4" />
-                                            Buy
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            className="w-full rounded-full h-11 text-blue-400 hover:text-blue-300 hover:bg-blue-500/5"
-                                        >
-                                            Learn more
-                                        </Button>
+                                        {/* Buttons */}
+                                        <div className="mt-auto flex flex-col gap-2">
+                                            <Button
+                                                onClick={() => handleAddToCart(product)}
+                                                className="w-full rounded-full h-11 bg-white text-black hover:bg-white/90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] font-medium"
+                                            >
+                                                <ShoppingBag className="mr-2 h-4 w-4" />
+                                                Buy
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                className="w-full rounded-full h-11 text-blue-400 hover:text-blue-300 hover:bg-blue-500/5"
+                                            >
+                                                Learn more
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                )}
+
+                {/* Empty state */}
+                {!loading && !error && products.length === 0 && (
+                    <div className="text-center py-16">
+                        <p className="text-white/40">No products available at the moment.</p>
+                    </div>
+                )}
             </Container>
         </section>
     );
