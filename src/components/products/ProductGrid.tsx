@@ -74,7 +74,7 @@ const containerVariants = {
 
 const cardVariants = {
     hidden: { opacity: 0, y: 40, scale: 0.95 },
-    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7 } },
 };
 
 export function ProductGrid() {
@@ -91,9 +91,11 @@ export function ProductGrid() {
     };
 
     return (
-        <section className="py-32 bg-black relative overflow-hidden">
+        <section className="py-32 bg-carbon relative overflow-hidden">
             {/* Background gradient */}
             <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-zinc-950/50 to-transparent" />
+            {/* Subtle ambient glow */}
+            <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-blue-500/[0.03] blur-[150px] rounded-full" />
 
             <Container className="relative z-10">
                 <motion.div
@@ -130,13 +132,13 @@ export function ProductGrid() {
                             variants={cardVariants}
                             className="group"
                         >
-                            <div className="glass-card rounded-2xl overflow-hidden h-full flex flex-col">
+                            <div className="dark-glass-card rounded-2xl overflow-hidden h-full flex flex-col">
                                 {/* Product Image Area */}
                                 <div className={`relative w-full aspect-[3/4] bg-gradient-to-br ${product.gradient} flex items-center justify-center overflow-hidden`}>
                                     {/* Badge */}
                                     {product.badge && (
                                         <div className="absolute top-4 left-4 z-10">
-                                            <span className="glass-button px-3 py-1 rounded-full text-[11px] font-medium text-white/80">
+                                            <span className="dark-glass-button px-3 py-1 rounded-full text-[11px] font-medium text-white/80">
                                                 {product.badge}
                                             </span>
                                         </div>

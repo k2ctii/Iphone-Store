@@ -27,9 +27,10 @@ const testimonials = [
 
 export function Testimonials() {
     return (
-        <section className="py-32 bg-black relative overflow-hidden">
-            {/* Decorative orb */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-500/[0.03] blur-[150px] rounded-full" />
+        <section className="py-32 bg-emerald-night relative overflow-hidden">
+            {/* Decorative orbs */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/[0.04] blur-[150px] rounded-full" />
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cyan-500/[0.03] blur-[120px] rounded-full" />
 
             <Container className="relative z-10">
                 <motion.div
@@ -56,7 +57,7 @@ export function Testimonials() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: i * 0.1 }}
                         >
-                            <div className="glass-card rounded-2xl p-8 h-full flex flex-col">
+                            <div className="dark-glass-card rounded-2xl p-8 h-full flex flex-col">
                                 {/* Stars */}
                                 <div className="flex gap-1 mb-6">
                                     {Array.from({ length: t.rating }).map((_, j) => (
@@ -71,7 +72,7 @@ export function Testimonials() {
 
                                 {/* Author */}
                                 <div className="flex items-center gap-3">
-                                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 flex items-center justify-center">
+                                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-500/30 to-cyan-500/30 flex items-center justify-center ring-1 ring-emerald-400/20">
                                         <span className="text-sm font-semibold text-white/80">{t.name[0]}</span>
                                     </div>
                                     <div>

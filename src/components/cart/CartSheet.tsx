@@ -12,12 +12,12 @@ export function CartSheet() {
 
     return (
         <Sheet open={isOpen} onOpenChange={toggleCart}>
-            <SheetContent className="w-full sm:max-w-md flex flex-col h-full bg-[#0a0a0a]/95 backdrop-blur-xl border-l border-white/[0.06]">
+            <SheetContent className="w-full sm:max-w-md flex flex-col h-full bg-[#0a0a14]/95 backdrop-blur-2xl border-l border-white/[0.06]">
                 <SheetHeader>
                     <SheetTitle className="text-white text-lg font-semibold flex items-center gap-3">
                         <ShoppingBag className="h-5 w-5 text-white/60" />
                         Your Bag
-                        <span className="glass-button px-2 py-0.5 rounded-full text-xs text-white/60">
+                        <span className="dark-glass-button px-2 py-0.5 rounded-full text-xs text-white/60">
                             {items.length}
                         </span>
                     </SheetTitle>
@@ -26,7 +26,7 @@ export function CartSheet() {
                 <div className="flex-1 overflow-y-auto py-6">
                     {items.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center gap-6 px-6">
-                            <div className="glass-card rounded-3xl p-8">
+                            <div className="dark-glass-card rounded-3xl p-8">
                                 <ShoppingBag className="h-12 w-12 text-white/10 mx-auto mb-4" />
                                 <p className="text-white/40 text-sm mb-2">Your bag is empty.</p>
                                 <p className="text-white/20 text-xs">Items you add will appear here.</p>
@@ -44,7 +44,7 @@ export function CartSheet() {
                             {items.map((item) => (
                                 <div
                                     key={item.id}
-                                    className="glass-card rounded-2xl p-4 flex gap-4 items-center"
+                                    className="dark-glass-card rounded-2xl p-4 flex gap-4 items-center"
                                 >
                                     {/* Image placeholder */}
                                     <div className="h-16 w-16 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
@@ -68,14 +68,14 @@ export function CartSheet() {
                                                         }
                                                     }
                                                 }}
-                                                className="glass-button h-6 w-6 rounded-full flex items-center justify-center text-white/40 hover:text-white/80"
+                                                className="dark-glass-button h-6 w-6 rounded-full flex items-center justify-center text-white/40 hover:text-white/80"
                                             >
                                                 <Minus className="h-3 w-3" />
                                             </button>
                                             <span className="text-xs text-white/60 font-medium w-4 text-center">{item.quantity}</span>
                                             <button
                                                 onClick={() => addItem({ ...item, quantity: 1 })}
-                                                className="glass-button h-6 w-6 rounded-full flex items-center justify-center text-white/40 hover:text-white/80"
+                                                className="dark-glass-button h-6 w-6 rounded-full flex items-center justify-center text-white/40 hover:text-white/80"
                                             >
                                                 <Plus className="h-3 w-3" />
                                             </button>
@@ -106,7 +106,7 @@ export function CartSheet() {
                             </div>
                             <div className="flex justify-between items-center text-sm text-white/40">
                                 <span>Shipping</span>
-                                <span className="text-green-400">Free</span>
+                                <span className="text-emerald-400">Free</span>
                             </div>
                             <div className="h-[1px] bg-white/[0.06] my-2" />
                             <div className="flex justify-between items-center text-lg font-semibold text-white">

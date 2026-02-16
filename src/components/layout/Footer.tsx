@@ -24,9 +24,10 @@ const footerLinks = [
 
 export function Footer() {
     return (
-        <footer className="bg-[#080808] border-t border-white/[0.04] relative overflow-hidden">
-            {/* Decorative subtle glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <footer className="dark-glass-strong border-t border-white/[0.04] relative overflow-hidden" style={{ borderRadius: 0 }}>
+            {/* Luminous top border glow */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[1px] bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[2px] bg-gradient-to-r from-transparent via-purple-400/15 to-transparent blur-sm" />
 
             <Container>
                 {/* Links Grid */}

@@ -29,8 +29,8 @@ export function Header() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-                        ? "glass-header shadow-lg shadow-black/20"
-                        : "bg-transparent"
+                    ? "dark-glass-header shadow-lg shadow-black/30"
+                    : "bg-transparent"
                     }`}
             >
                 <Container>
@@ -43,7 +43,7 @@ export function Header() {
                             <span className="text-lg font-light tracking-tight text-white/50 group-hover:text-white/70 transition-colors ml-1">
                                 Store
                             </span>
-                            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gradient-to-r from-blue-400 to-purple-400 group-hover:w-full transition-all duration-300" />
+                            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gradient-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300" />
                         </Link>
 
                         {/* Desktop Nav */}
@@ -55,7 +55,7 @@ export function Header() {
                                     className="relative px-4 py-2 text-[13px] font-medium text-white/60 hover:text-white transition-all duration-300 group"
                                 >
                                     {item}
-                                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-white/30 group-hover:w-[60%] transition-all duration-300" />
+                                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-gradient-to-r from-cyan-400/50 to-purple-400/50 group-hover:w-[60%] transition-all duration-300" />
                                 </Link>
                             ))}
                         </nav>
@@ -114,7 +114,7 @@ export function Header() {
                         transition={{ duration: 0.3, ease: "easeOut" }}
                         className="fixed inset-0 z-40 pt-14 lg:hidden"
                     >
-                        <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={() => setMobileOpen(false)} />
+                        <div className="absolute inset-0 dark-glass-strong" onClick={() => setMobileOpen(false)} />
                         <nav className="relative p-6 flex flex-col gap-1">
                             {navLinks.map((item, i) => (
                                 <motion.div
